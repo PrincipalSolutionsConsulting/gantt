@@ -18,6 +18,7 @@ export default class Gantt {
 
     setup_wrapper(element) {
         let svg_element, wrapper_element;
+        this.label_container = document.querySelector('.gantt-label-container');
 
         // CSS Selector is passed
         if (typeof element === 'string') {
@@ -925,6 +926,7 @@ export default class Gantt {
      * @memberof Gantt
      */
     clear() {
+        if (this.label_container) this.label_container.innerHTML = '';
         this.$svg.innerHTML = '';
     }
 }

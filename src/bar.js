@@ -21,6 +21,7 @@ export default class Bar {
     }
 
     prepare_values() {
+        this.label_container = document.querySelector('.gantt-label-container');
         this.invalid = this.task.invalid;
         this.height = this.gantt.options.bar_height;
         this.x = this.compute_x();
@@ -109,15 +110,27 @@ export default class Bar {
     }
 
     draw_label() {
-        createSVG('text', {
-            x: this.x + this.width / 2,
-            y: this.y + this.height / 2,
-            innerHTML: this.task.name,
-            class: 'bar-label',
-            append_to: this.bar_group
-        });
-        // labels get BBox in the next tick
-        requestAnimationFrame(() => this.update_label_position());
+        if (this.label_container) {
+            createSVG('text', {
+                x: 10,
+                y: (this.y + this.height / 2) + 4,
+                innerHTML: this.task.name,
+                class: 'bar-label',
+                append_to: this.label_container
+            });
+        }
+
+        if (!this.label_container) {
+            createSVG('text', {
+                x: this.x + this.width / 2,
+                y: this.y + this.height / 2,
+                innerHTML: this.task.name,
+                class: 'bar-label',
+                append_to: this.bar_group
+            });
+            // labels get BBox in the next tick
+            requestAnimationFrame(() => this.update_label_position());
+        }
     }
 
     draw_resize_handles() {
@@ -195,11 +208,10 @@ export default class Bar {
     show_popup() {
         if (this.gantt.bar_being_dragged) return;
 
-        const start_date = date_utils.format(this.task._start, 'MMM D', this.gantt.options.language);
+        const start_date = date_utils.format(this.task._start, 'MMM D');
         const end_date = date_utils.format(
             date_utils.add(this.task._end, -1, 'second'),
-            'MMM D',
-            this.gantt.options.language
+            'MMM D'
         );
         const subtitle = start_date + ' - ' + end_date;
 
@@ -207,7 +219,7 @@ export default class Bar {
             target_element: this.$bar,
             title: this.task.name,
             subtitle: subtitle,
-            task: this.task,
+            task: this.task
         });
     }
 
@@ -231,7 +243,7 @@ export default class Bar {
         if (width && width >= this.gantt.options.column_width) {
             this.update_attr(bar, 'width', width);
         }
-        this.update_label_position();
+        if (!this.label_container) this.update_label_position();
         this.update_handle_position();
         this.update_progressbar_position();
         this.update_arrow_position();
