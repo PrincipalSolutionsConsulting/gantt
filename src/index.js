@@ -18,7 +18,7 @@ export default class Gantt {
 
     setup_wrapper(element) {
         let svg_element, wrapper_element;
-        this.label_container = document.querySelector('.gantt-label-container');
+        this.label_container = document.querySelector('.js-gantt-label-container');
 
         // CSS Selector is passed
         if (typeof element === 'string') {

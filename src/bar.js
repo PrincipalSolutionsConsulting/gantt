@@ -21,7 +21,7 @@ export default class Bar {
     }
 
     prepare_values() {
-        this.label_container = document.querySelector('.gantt-label-container');
+        this.label_container = document.querySelector('.js-gantt-label-container');
         this.invalid = this.task.invalid;
         this.height = this.gantt.options.bar_height;
         this.x = this.compute_x();
